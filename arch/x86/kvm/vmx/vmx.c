@@ -6448,12 +6448,59 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
  * The guest has exited.  See if we can fix it or if we need userspace
  * assistance.
  */
+
+/* Add global counters at the top of the file */
+static unsigned long long exit_counters[256] = {0}; // per-exit-type counters
+static unsigned long long total_exit_count = 0; // total exit counter
+
+/* Helper function which map exit codes to human readable names */
+static const char *get_exit_reason_name(int reason) {
+    switch (reason) {
+      case 0: return "EXCEPTION_NMI";              // Non-maskable interrupt or exception
+      case 1: return "EXTERNAL_INTERRUPT";         // External interrupt
+      case 2: return "TRIPLE_FAULT";               // Triple fault
+      case 3: return "INIT_SIGNAL";                // INIT signal
+      case 4: return "STARTUP_IPI";                // Startup IPI
+      case 7: return "IO_SMI";                     // SMI during I/O instruction
+      case 9: return "CPUID";                      // CPUID instruction
+      case 10: return "GETSEC";                    // GETSEC instruction
+      case 28: return "HLT";                       // HLT instruction
+      case 30: return "MSR_WRITE";                 // Write to model-specific register
+      case 31: return "MSR_READ";                  // Read from model-specific register
+      case 48: return "EPT_MISCONFIG";             // EPT misconfiguration
+      case 49: return "EPT_VIOLATION";             // EPT violation
+      case 50: return "PREEMPTION_TIMER";          // VMX preemption timer expired
+      default: return "UNKNOWN_EXIT";              // Catch-all for unknown reasons
+    }
+}
+
+/* Function to log exit counts every 10,000 exits */
+static void log_exit_counts(void) {
+    printk(KERN_INFO "KVM Exit Stats (Every 10,000 Exits):\n");
+    for (int exit_code = 0; exit_code < 256; exit_code++) {
+        if (exit_counters[exit_code] > 0) {
+            printk(KERN_INFO "  Exit Code: %d (%s) - %llu occurrences\n",
+                   exit_code, get_exit_reason_name(exit_code), exit_counters[exit_code]);
+        }
+    }
+}
+
 static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 {
 	struct vcpu_vmx *vmx = to_vmx(vcpu);
 	union vmx_exit_reason exit_reason = vmx->exit_reason;
 	u32 vectoring_info = vmx->idt_vectoring_info;
 	u16 exit_handler_index;
+        
+	/* Code snippet to be added to the KVM exit handler */
+        int exit_code = exit_reason.basic; // Extract exit reason
+        exit_counters[exit_code]++;        // Increment per-exit-type counter
+        total_exit_count++;                // Increment global counter
+
+        /* Log every 10,000 exits */
+        if (total_exit_count % 10000 == 0) {
+          log_exit_counts();
+        }
 
 	/*
 	 * Flush logged GPAs PML buffer, this will make dirty_bitmap more
