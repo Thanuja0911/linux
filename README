@@ -1,11 +1,11 @@
-## Team Members
+##Team Members
 1. Thanuja Mudududla
 2. Yashishvin Pothuri (018222113)
 
 ## Q1. Task Division
 ### Environment Setup
-- **Thanuja**: Set up the outer VM with working nested virtualization. Installed prerequisites, dependencies, and cloned the Linux kernel from the official GitHub repository.
-- **Yash**: Controlled cloud VM settings, configured remote desktop, and validated nested virtualization capabilities.
+- Thanuja: Set up the outer VM with working nested virtualization. Installed prerequisites, dependencies, and cloned the Linux kernel from the official GitHub repository.
+- Yash: Controlled cloud VM settings, configured remote desktop, and validated nested virtualization capabilities.
 
 ### Kernel Build:
 Yash: Configured kernel build settings, fixed build problems, and at the installation in the outer VM of the prepared kernel. Created snapshots of the VM as a safety procedural before installation.
