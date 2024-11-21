@@ -1,18 +1,29 @@
-Linux kernel
-============
+#Team Members
+1) Thanuja Mudududla
+2) Yashishvin Pothuri(018222113)
 
-There are several guides for kernel developers and users. These guides can
-be rendered in a number of formats, like HTML and PDF. Please read
-Documentation/admin-guide/README.rst first.
+#Q1. Task Division - 
+###Environment Setup:
+Thanuja: Set up the outer VM with working nested virtualization. Installed prerequisites, dependencies, and cloned the Linux kernel from the official GitHub repository.
+Yash: Controlled cloud VM settings, configured remote desktop, and validated nested virtualization capabilities.
 
-In order to build the documentation, use ``make htmldocs`` or
-``make pdfdocs``.  The formatted documentation can also be read online at:
+###Kernel Build:
+Yash: Configured kernel build settings, fixed build problems, and at the installation in the outer VM of the prepared kernel. Created snapshots of the VM as a safety procedural before installation.
+Thanuja: Aided in build configuration and verified the integrity of the environment post-kernel installation.
 
-    https://www.kernel.org/doc/html/latest/
+###KVM Code Modifications:
+Yash: Changed the KVM exit handler in the kernel source code to add counters in the exit types and incorporated printk logging every 10,000 exits.
+Thanuja: Performed code change review for correctness and consistency by suggesting improvements on needed items.
 
-There are various text files in the Documentation/ subdirectory,
-several of them using the reStructuredText markup notation.
+###Testing:
+Yash: Recompiled the kernel with KVM changes and validated with tests that the modified kernel in the outer VM was functional.
+Thanuja: Booted the inner VM with the changed kernel, checked dmesg logs, and validated that exit counts and logs were correct.
 
-Please read the Documentation/process/changes.rst file, as it contains the
-requirements for building and running the kernel, and information about
-the problems which may result by upgrading your kernel.
+###Documentation and Analysis:
+Thanuja: Documented the KVM code changes, noting which parts of code were changed and how the exit-counting mechanism was implemented.
+Yash: Documented the procedures for testing, including the various workloads used to check exit types and the findings observed from test work.
+
+#Q2. Documentation -
+
+###Step 1: Environment Setup - Setting up Google Cloud VM
+To begin the assignment, we re-created the setup from Assignment 1 to establish a solid foundation for the tasks in Assignment 2. This involved creating the outer VM on Google Cloud, ensuring that it was configured with nested virtualization capabilities to support the requirements of this assignment. We also installed and configured essential tools, such as Google Chrome 
