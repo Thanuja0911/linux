@@ -28,8 +28,7 @@
 
    **Step 1: Environment Setup - Setting up Google Cloud VM** <br/>
 
-To begin the assignment, we re-created the setup from Assignment 1 to establish a solid foundation for the tasks in Assignment 2. This involved creating the outer VM on Google Cloud, ensuring that it was configured with nested virtualization capabilities to support the requirements of this assignment. We also installed and configured essential tools, such as Google Chrome
-Remote Desktop, allowing us to easily access and manage the VM remotely for further development and testing. Additionally, we set up the inner VM within the outer environment, replicating the nested virtualization setup used in Assignment 1. This inner VM provided the environment necessary to thoroughly test the changes we planned to make to the kernel's KVM module, facilitating accurate and isolated evaluation of our modifications. This initial setup ensured a seamless transition into the new tasks, allowing us to focus on kernel development and testing without setup complications.
+To begin the assignment, we re-created the setup from Assignment 1 to establish a solid foundation for the tasks in Assignment 2. This involved creating the outer VM on Google Cloud, ensuring that it was configured with nested virtualization capabilities to support the requirements of this assignment. We also installed and configured essential tools, such as Google Chrome Remote Desktop, allowing us to easily access and manage the VM remotely for further development and testing. Additionally, we set up the inner VM within the outer environment, replicating the nested virtualization setup used in Assignment 1. This inner VM provided the environment necessary to thoroughly test the changes we planned to make to the kernel's KVM module, facilitating accurate and isolated evaluation of our modifications. This initial setup ensured a seamless transition into the new tasks, allowing us to focus on kernel development and testing without setup complications.
  
 <img width="1470" alt="Screenshot 2024-11-18 at 11 19 11 PM" src="https://github.com/user-attachments/assets/3fec25d8-80ba-4a14-9105-d08d388819c9">
 
@@ -51,7 +50,7 @@ sudo apt update
 sudo apt install build-essential libncurses-dev bison flex libssl-dev libelf-dev
 ```
 
-Then, using the cloned kernel source, we configured the kernel build environment. This included using make **menuconfig** to ensure the necessary components, like KVM support, were enabled for our custom kernel build.
+Then, using the cloned kernel source, we configured the kernel build environment. We copied the default gcp config file from the boot directory and then we used **menuconfig** to ensure the necessary components, like KVM support, were enabled for our custom kernel build.
 We also need to ensure that the following lines in your config file are set to empty strings if not you may come across compilation errors related to certificates, you can edit your file using text editors like vim or nano
 
 ```
