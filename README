@@ -28,7 +28,7 @@ Yash: Documented the procedures for testing, including the various workloads use
    Step 1: Environment Setup - Setting up Google Cloud VM
 To begin the assignment, we re-created the setup from Assignment 1 to establish a solid foundation for the tasks in Assignment 2. This involved creating the outer VM on Google Cloud, ensuring that it was configured with nested virtualization capabilities to support the requirements of this assignment. We also installed and configured essential tools, such as Google Chrome
 Remote Desktop, allowing us to easily access and manage the VM remotely for further development and testing. Additionally, we set up the inner VM within the outer environment, replicating the nested virtualization setup used in Assignment 1. This inner VM provided the environment necessary to thoroughly test the changes we planned to make to the kernel's KVM module, facilitating accurate and isolated evaluation of our modifications. This initial setup ensured a seamless transition into the new tasks, allowing us to focus on kernel development and testing without setup complications. 
-
+![Screenshot 1](https://github.com/Thanuja0911/linux/blob/master/screenshot/screenshot1.jpeg)
    Step 2:
 Following the initial setup, we moved on to the kernel build phase, where we prepared the environment for modifying the KVM hypervisor. First, we forked the Linux kernel source code from the main repository on GitHub into our personal GitHub accounts.
 This provided us with a dedicated space to make and track changes.
