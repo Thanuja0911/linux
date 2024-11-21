@@ -66,7 +66,7 @@ After completing these steps we will have the kernel installed. This setup allow
 We then modified the KVM source code to implement the assignment requirements. We began by locating the KVM exit handling code within the kernel's source files. Specifically, this involved identifying the __vmx_handle_exit function located in(~/linux/arch/x86/kvm/vmx) the KVM module, where VM exits are handled. 
 Here, we defined our global total exit counter and a global counter for each exit, for every 10,000 exits we print the stats for how many exits we encountered and how many time we encountered them we do this through the print k function, we print a human-readable name of the exit along with the exit code and the number of times the exit occurred. You can find a snippet of the code below( get_exit_reason_name converts the exit reason to a human readable name
 
-```c
+
 static unsigned long long exit_counters[256] = {0}; // per-exit-type counters
 static unsigned long long total_exit_count = 0; // total exit counter
 
@@ -128,7 +128,6 @@ static const char *get_exit_reason_name(int reason) {
 }
 
 The function log_exit_counts prints the statistics for the number of exits
-```c
 static void log_exit_counts(void) {
     printk(KERN_INFO "KVM Exit Stats (Every 10,000 Exits):\n");
     for (int exit_code = 0; exit_code < 256; exit_code++) {
@@ -165,9 +164,8 @@ xits we need to restart our inner vm we did it through the virt manager GUI on t
 
 To check the type of exits occurring we ran the following command on the outer VM
 
-```
 sudo dmesg | grep "  Exit Code"
-```
+
 This printed the statistic of the different types of exits and the number of times they were occurring.
 
 Q3)Comment on the frequency of exits – does the number of exits increase at a stable rate? Or are there
