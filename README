@@ -64,7 +64,8 @@ sudo update-grub
 After this we rebooted the outer VM using the command
 sudo reboot
 
-After rebooting We verified that the new kernel works by checking the version of the kernel with the command uname -r
+After rebooting We verified that the new kernel works by checking the version of the kernel with the command 
+uname -r
 
 After completing these steps we will have the kernel installed. This setup allowed us to begin modifying the kernel code with a stable and verified environment, ready to implement the KVM-specific changes.
 We then modified the KVM source code to implement the assignment requirements. We began by locating the KVM exit handling code within the kernel's source files. Specifically, this involved identifying the __vmx_handle_exit function located in(~/linux/arch/x86/kvm/vmx) the KVM module, where VM exits are handled. 
