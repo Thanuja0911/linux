@@ -6456,21 +6456,57 @@ static unsigned long long total_exit_count = 0; // total exit counter
 /* Helper function which map exit codes to human readable names */
 static const char *get_exit_reason_name(int reason) {
     switch (reason) {
-      case 0: return "EXCEPTION_NMI";              // Non-maskable interrupt or exception
-      case 1: return "EXTERNAL_INTERRUPT";         // External interrupt
-      case 2: return "TRIPLE_FAULT";               // Triple fault
-      case 3: return "INIT_SIGNAL";                // INIT signal
-      case 4: return "STARTUP_IPI";                // Startup IPI
-      case 7: return "IO_SMI";                     // SMI during I/O instruction
-      case 9: return "CPUID";                      // CPUID instruction
-      case 10: return "GETSEC";                    // GETSEC instruction
-      case 28: return "HLT";                       // HLT instruction
-      case 30: return "MSR_WRITE";                 // Write to model-specific register
-      case 31: return "MSR_READ";                  // Read from model-specific register
-      case 48: return "EPT_MISCONFIG";             // EPT misconfiguration
-      case 49: return "EPT_VIOLATION";             // EPT violation
-      case 50: return "PREEMPTION_TIMER";          // VMX preemption timer expired
-      default: return "UNKNOWN_EXIT";              // Catch-all for unknown reasons
+    case 0:  return "EXCEPTION_NMI";                  // Non-maskable interrupt or exception
+    case 1:  return "EXTERNAL_INTERRUPT";             // External interrupt
+    case 2:  return "TRIPLE_FAULT";                   // Triple fault
+    case 3:  return "INIT_SIGNAL";                    // INIT signal
+    case 4:  return "STARTUP_IPI";                    // Startup IPI
+    case 5:  return "IO_SMI";                         // SMI during I/O instruction
+    case 6:  return "OTHER_SMI";                      // SMI other than I/O
+    case 7:  return "INTERRUPT_WINDOW";               // Interrupt window exiting
+    case 8:  return "NMI_WINDOW";                     // NMI window exiting
+    case 9:  return "CPUID";                          // CPUID instruction
+    case 10: return "GETSEC";                         // GETSEC instruction
+    case 11: return "HLT";                            // HLT instruction
+    case 12: return "INVD";                           // INVD instruction
+    case 13: return "INVLPG";                         // INVLPG instruction
+    case 14: return "RDPMC";                          // RDPMC instruction
+    case 15: return "RDTSC";                          // RDTSC instruction
+    case 16: return "RSM";                            // RSM instruction in SMM
+    case 17: return "VMCALL";                         // VMCALL instruction
+    case 18: return "VMCLEAR";                        // VMCLEAR instruction
+    case 19: return "VMLAUNCH";                       // VMLAUNCH instruction
+    case 20: return "VMPTRLD";                        // VMPTRLD instruction
+    case 21: return "VMPTRST";                        // VMPTRST instruction
+    case 22: return "VMREAD";                         // VMREAD instruction
+    case 23: return "VMRESUME";                       // VMRESUME instruction
+    case 24: return "VMWRITE";                        // VMWRITE instruction
+    case 25: return "VMXOFF";                         // VMXOFF instruction
+    case 26: return "VMXON";                          // VMXON instruction
+    case 27: return "CR_ACCESS";                      // Control register access
+    case 28: return "DR_ACCESS";                      // Debug register access
+    case 29: return "IO_INSTRUCTION";                 // I/O instruction
+    case 30: return "MSR_READ";                       // MSR read
+    case 31: return "MSR_WRITE";                      // MSR write
+    case 32: return "INVALID_GUEST_STATE";            // Invalid guest state
+    case 33: return "EPT_VIOLATION";                  // EPT violation
+    case 34: return "EPT_MISCONFIG";                  // EPT misconfiguration
+    case 35: return "INVEPT";                         // INVEPT instruction
+    case 36: return "RDTSCP";                         // RDTSCP instruction
+    case 37: return "VMX_PREEMPTION_TIMER_EXPIRED";   // VMX preemption timer expired
+    case 38: return "INVVPID";                        // INVVPID instruction
+    case 39: return "WBINVD";                         // WBINVD instruction
+    case 40: return "XSETBV";                         // XSETBV instruction
+    case 41: return "APIC_WRITE";                     // APIC write
+    case 42: return "RDRAND";                         // RDRAND instruction
+    case 43: return "INVPCID";                        // INVPCID instruction
+    case 44: return "VMFUNC";                         // VMFUNC instruction
+    case 45: return "ENCLS";                          // ENCLS instruction
+    case 46: return "RDSEED";                         // RDSEED instruction
+    case 47: return "PAGE_MODIFICATION_LOG_FULL";     // PML buffer full
+    case 48: return "XSAVES";                         // XSAVES instruction
+    case 49: return "XRSTORS";                        // XRSTORS instruction
+    default: return "UNKNOWN_EXIT";                   // Catch-all for unrecognized exit codes
     }
 }
 
@@ -6492,7 +6528,6 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 	u32 vectoring_info = vmx->idt_vectoring_info;
 	u16 exit_handler_index;
         
-	/* Code snippet to be added to the KVM exit handler */
         int exit_code = exit_reason.basic; // Extract exit reason
         exit_counters[exit_code]++;        // Increment per-exit-type counter
         total_exit_count++;                // Increment global counter
@@ -6500,6 +6535,7 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
         /* Log every 10,000 exits */
         if (total_exit_count % 10000 == 0) {
           log_exit_counts();
+	  printk(KERN_INFO "Total VM Exits so far: %llu\n", total_exit_count );
         }
 
 	/*
